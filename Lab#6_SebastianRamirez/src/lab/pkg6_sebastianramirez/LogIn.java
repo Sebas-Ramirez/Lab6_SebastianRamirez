@@ -6,11 +6,14 @@
 package lab.pkg6_sebastianramirez;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -72,6 +75,11 @@ public class LogIn extends javax.swing.JFrame {
         jScrollPane2.setViewportView(ta_mensaje);
 
         jButton3.setText("Send");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         ta_contactos.setColumns(20);
         ta_contactos.setRows(5);
@@ -256,11 +264,26 @@ public class LogIn extends javax.swing.JFrame {
         Scanner sc = null;
         File archivo = new File("./Users.txt");
         if(archivo.exists()){
-            
+            try {
+                sc = new Scanner(archivo);
+                
+                while (sc.hasNextLine()) {
+                    sc.useDelimiter(";");
+                    System.out.println(sc.next());
+                    if(tf_usuario.getText().equals(sc.next())&&PasswordField1.getText().equals(sc.next())){
+                        ta_contactos.setText(cargarContactos());
+                        Chat.pack();
+                        Chat.setLocationRelativeTo(this);
+                        Chat.setVisible(true);
+                        sc.close();
+                    }
+                }
+            } catch (NoSuchElementException ex) {
+                JOptionPane.showMessageDialog(this, "No existe el usuario");
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "No existe el archivo");
+            }
         }
-        Chat.pack();
-        Chat.setLocationRelativeTo(this);
-        Chat.setVisible(true);
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -280,7 +303,12 @@ public class LogIn extends javax.swing.JFrame {
             a.escribirArchivo();
         } catch (IOException ex) {
         }
+        NuevoUsuario.setVisible(false);
     }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -345,4 +373,25 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JTextField tf_nombre;
     private javax.swing.JTextField tf_usuario;
     // End of variables declaration//GEN-END:variables
+    String cargarContactos(){
+        Scanner sc = null;
+        File archivo = new File("./Users.txt");
+        String contactos=" ";
+        if(archivo.exists()){
+
+            try {
+                sc = new Scanner(archivo);
+                while (sc.hasNextLine()) {
+                   contactos = sc.next()+"\n";
+                   sc.next();
+                   sc.next();
+                   sc.next();
+                }
+            } catch (FileNotFoundException ex) {
+               
+            }
+            
+        }
+        return contactos;
+    }
 }

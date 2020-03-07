@@ -1,2 +1,4 @@
 Andrea Mendoza;AndreaJ;123456;02/07/2001
 Sebastian Ramirez;SRamirez;sebastian2001;28/07/2001
+Camilo;CamiloFerrera;holamundo;01/03/2000
+David Reyes;D_Reyes;1234567;02/03/1999
